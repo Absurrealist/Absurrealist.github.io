@@ -173,7 +173,7 @@ document.getElementById('exemptionForm').addEventListener('submit', function(e) 
     }
     appState.formData.exemptions = exemptions;
 
-    showLoading('Analyzing exemptions...');
+    showLoading('Analysing exemptions...');
     setTimeout(() => {
         hideLoading();
         showForm('form5');
@@ -307,7 +307,7 @@ document.getElementById('finalForm').addEventListener('submit', function(e) {
     setTimeout(() => {
         clearInterval(interval);
         document.getElementById('processingPercent').textContent = '100%';
-        showLoading('Finalizing submission...');
+        showLoading('Finalising submission...');
         
         setTimeout(() => {
             hideLoading();
@@ -352,7 +352,7 @@ function startNewRequest() {
 
 function beginMetaRequest() {
     // Start over with surreal message
-    alert('Beginning Meta-Request Process...\n\nYou will now complete a request to request information about requesting information.\n\nThis process has 14 stages.');
+    alert('Beginning Meta-Request Process...\n\nYou will now complete a request to request information about requesting information.\n\nThis process has 37 steps.');
     returnToHome();
 }
 
