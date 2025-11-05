@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Portal</title>
+    <style>
+
+        :root {
+            --gov-blue: #003b5c;
+            --gov-blue-light: #0066a1;
+            --gov-grey: #f4f5f7;
+            --gov-grey-dark: #6b7684;
+            --gov-border: #d4d8dd;
+            --gov-error: #c9302c;
+            --gov-warning: #ec971f;
+            --gov-white: #ffffff;
+            --gov-text: #313131;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Helvetica Neue', sans-serif;
+            background-color: var(--gov-grey);
+            color: var(--gov-text);
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: var(--gov-blue);
+            color: white;
+            padding: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-top {
+            background-color: #001f3f;
+            padding: 8px 0;
+            font-size: 12px;
+        }
+
+        .header-top .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-main {
+            padding: 20px 0;
+        }
+
+        .header-main .container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .gov-seal {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            text-align: center;
+            padding: 5px;
+        }
+
+        .header-title h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            margin: 30px auto;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+
+        .content-area {
+            flex: 1;
+            background-color: white;
+            border: 1px solid var(--gov-border);
+            border-radius: 4px;
+            padding: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .sidebar {
+            width: 300px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-section {
+            background-color: white;
+            border: 1px solid var(--gov-border);
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .sidebar-section h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: var(--gov-blue);
+            border-bottom: 2px solid var(--gov-border);
+            padding-bottom: 8px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gov-grey);
+            font-size: 13px;
+        }
+
+        .status-item:last-child {
+            border-bottom: none;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #5cb85c;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .page-title {
+            font-size: 28px;
+            color: var(--gov-blue);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .page-subtitle {
+            color: var(--gov-grey-dark);
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+
+        .service-tiles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .service-tile {
+            background-color: white;
+            border: 2px solid var(--gov-border);
+            border-radius: 4px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .service-tile:hover {
+            border-color: var(--gov-blue);
+            box-shadow: 0 2px 8px rgba(0,59,92,0.15);
+            transform: translateY(-2px);
+        }
+
+        .service-tile h3 {
+            color: var(--gov-blue);
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .service-tile p {
+            color: var(--gov-grey-dark);
+            font-size: 14px;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .form-header {
+            background-color: var(--gov-grey);
+            padding: 20px;
+            margin: -30px -30px 30px -30px;
+            border-bottom: 3px solid var(--gov-blue);
+        }
+
+        .form-header h2 {
+            color: var(--gov-blue);
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+        .form-header .form-id {
+            font-size: 12px;
+            color: var(--gov-grey-dark);
+            font-family: monospace;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--gov-text);
+            font-size: 14px;
+        }
+
+        .form-label .required {
+            color: var(--gov-error);
+            margin-left: 3px;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--gov-border);
+            border-radius: 3px;
+            font-size: 14px;
+            font-family: inherit;
+            background-color: white;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--gov-blue);
+            box-shadow: 0 0 0 2px rgba(0,59,92,0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-help {
+            font-size: 12px;
+            color: var(--gov-grey-dark);
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .checkbox-group {
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 12px;
+            background-color: var(--gov-grey);
+            border-radius: 3px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 12px;
+            margin-top: 3px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 3px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: var(--gov-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--gov-blue-light);
+        }
+
+        .btn-secondary {
+            background-color: var(--gov-grey-dark);
+            color: white;
+            margin-left: 10px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6169;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .form-actions {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--gov-border);
+        }
+
+        .progress-indicator {
+            background-color: var(--gov-grey);
+            padding: 15px;
+            border-radius: 3px;
+            margin-bottom: 25px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--gov-blue);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 12px;
+            color: var(--gov-grey-dark);
+            text-align: center;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 3px;
+            margin-bottom: 20px;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background-color: #d9edf7;
+            border-color: #31708f;
+            color: #31708f;
+        }
+
+        .alert-warning {
+            background-color: #fcf8e3;
+            border-color: var(--gov-warning);
+            color: #8a6d3b;
+        }
+
+        .alert-error {
+            background-color: #f2dede;
+            border-color: var(--gov-error);
+            color: #a94442;
+        }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 4px;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--gov-grey);
+            border-top-color: var(--gov-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .status-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .status-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--gov-grey);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        .status-title {
+            font-size: 24px;
+            color: var(--gov-blue);
+            margin-bottom: 15px;
+        }
+
+        .status-description {
+            color: var(--gov-grey-dark);
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+
+        .file-upload-wrapper {
+            border: 2px dashed var(--gov-border);
+            border-radius: 3px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .file-upload-wrapper:hover {
+            border-color: var(--gov-blue);
+        }
+
+        .file-upload-wrapper input[type="file"] {
+            display: none;
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: var(--gov-blue);
+            margin-bottom: 5px;
+        }
+
+        .faq-answer {
+            color: var(--gov-grey-dark);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+
+            .service-tiles {
+                grid-template-columns: 1fr;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+
+    <div class="machinery-bg">
+        <div class="pipe pipe1"></div>
+        <div class="pipe pipe2"></div>
+        <div class="pipe pipe3"></div>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3 id="loadingText">Processing your submission...</h3>
+            <p style="color: #757575; margin-top: 10px; font-size: 12px;">This may take several moments (or longer)</p>
+        </div>
+    </div>
+
+    <div class="timer-display" id="timerDisplay" style="display: none;">
+        <span id="timerText">TIME ELAPSED: 00:00</span>
+    </div>
+
+    <header class="header">
+        <div class="header-top">
+            <div class="container">
+                <span>Commonwealth of Australia</span>
+                <span>Est. [REDACTED]</span>
+            </div>
+        </div>
+        <div class="header-main">
+            <div class="container">
+                <div class="gov-seal">DEPT<br>INFO<br>&amp;<br>REC</div>
+                <div class="header-title">
+                    <h1>Department of Information and Records</h1>
+                    <p>Your Democratic Right to Access Government Information</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="content-area">
+            <!-- Landing Page -->
+            <div id="landingPage" class="form-section active">
+                <h1 class="page-title">Freedom of Information Portal</h1>
+                <p class="page-subtitle">Department of Information and Records - Commonwealth of Australia</p>
+                
+                <div class="alert alert-warning">
+                    <strong>⏱ ESTIMATED TIME: 5-10 MINUTES</strong><br>
+                    This application will guide you through the FOI request process. Please ensure you have adequate time to complete this journey. Sessions may expire. Forms may change. Progress is not guaranteed.
+                </div>
+
+                <div style="background: rgba(124, 179, 66, 0.08); padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--rusted-orange);">
+                    <p style="margin: 0; font-size: 14px;">The Freedom of Information Act (2024) provides citizens with the right to access government-held information, subject to certain exemptions and conditions as determined by the Department (or as may be determined). This portal facilitates the submission and processing of FOI requests in accordance with legislative requirements and administrative protocols (which may or may not apply).</p>
+                </div>
+
+                <div style="text-align: center; margin: 40px 0;">
+                    <button class="btn btn-primary" onclick="startApplication()" style="font-size: 18px; padding: 16px 48px;">BEGIN REQUEST</button>
+                </div>
+
+                <details style="margin-top: 30px; border: 2px solid var(--borders); padding: 15px; background: rgba(0,0,0,0.03);">
+                    <summary style="cursor: pointer; font-weight: bold; font-size: 15px; margin-bottom: 10px;">FAQ: Questions That May Be Frequently Asked</summary>
+                    <div style="margin-top: 15px; font-size: 12px; line-height: 1.8;">
+                        <p><strong>Q: How long does the FOI process take?</strong><br>
+                        A: Processing times vary depending on complexity, departmental capacity, staffing levels, bureaucratic impediments, and factors beyond our control or knowledge.</p>
+                        
+                        <p><strong>Q: What information can I request?</strong><br>
+                        A: You may request any information that may or may not be held by the Department, subject to exemptions (which are numerous and subject to interpretation).</p>
+                        
+                        <p><strong>Q: What if my request is denied?</strong><br>
+                        A: You may appeal the decision through appropriate channels as outlined in documentation that will or will not be provided.</p>
+                        
+                        <p><strong>Q: Who can submit an FOI request?</strong><br>
+                        A: Any person or entity may submit a request, provided they meet eligibility criteria established by the Department (criteria subject to change without notice).</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Stage 1: Identify Your Request -->
+            <div id="form1" class="form-section">
+                <div class="form-header">
+                    <h2>Identify Your Request</h2>
+                    <div class="form-id">FORM ID: FOI-IR-001-v12.4.7 (or current version)</div>
+                </div>
+
+                <div class="progress-indicator">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 14%;"></div>
+                    </div>
+                    <div class="progress-text">STAGE 1 OF 7 - IDENTIFY YOUR REQUEST</div>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>Notice:</strong> Please describe the information you are seeking. Be as specific or as vague as the circumstances require (or permit).
+                </div>
+
+                <form id="initialForm">
+                    <div class="form-group">
+                        <label class="form-label">What information are you seeking? <span class="required">*</span></label>
+                        <textarea class="form-textarea" id="informationSeeking" required placeholder="Describe the information you wish to obtain (assuming it exists)"></textarea>
+                        <div class="form-help">Include any reference numbers, dates, or departments if known (or believed to be known, or should be known)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Why do you need this information? <span class="required">*</span></label>
+                        <select class="form-select" id="requestReason" required>
+                            <option value="">-- Select One --</option>
+                            <option value="transparency">Transparency and Accountability</option>
+                            <option value="personal">Personal Interest</option>
+                            <option value="journalistic">Journalistic Research</option>
+                            <option value="academic">Academic Study</option>
+                            <option value="unknown">Unknown</option>
+                            <option value="other">Other (Please Do Not Explain)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">How would you categorize this request? <span class="required">*</span></label>
+                        <select class="form-select" id="requestCategory" required>
+                            <option value="">-- Select One --</option>
+                            <option value="definitely">Definitely Exists</option>
+                            <option value="probably">Probably Exists</option>
+                            <option value="may">May Have Existed</option>
+                            <option value="shouldnt">Shouldn't Exist</option>
+                            <option value="unclear">Existential Status Unclear</option>
+                        </select>
+                        <div class="form-help">This helps us route your request to the appropriate department (if it can be determined)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Department of Origin <span class="required">*</span></label>
+                        <select class="form-select" id="departmentOrigin" required>
+                            <option value="">-- Select Department --</option>
+                            <option value="homeaffairs">Department of Home Affairs</option>
+                            <option value="justice">Department of Justice</option>
+                            <option value="ato">Australian Tax Office</option>
+                            <option value="clarification">Department of Administrative Clarification</option>
+                            <option value="jurisdictional">Bureau of Jurisdictional Determination</option>
+                            <option value="recursive">Office of Recursive Processing</option>
+                            <option value="unknown">Unknown Department</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">PROCEED TO NEXT STAGE</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Stage 2: Verify Your Identity -->
+            <div id="form2" class="form-section">
+                <div class="form-header">
+                    <h2>Verify Your Identity</h2>
+                    <div class="form-id">FORM ID: FOI-VI-002-v8.1.3 (subject to revision)</div>
+                </div>
+
+                <div class="progress-indicator">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 28%;"></div>
+                    </div>
+                    <div class="progress-text">STAGE 2 OF 7 - VERIFY YOUR IDENTITY</div>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>Identity Verification:</strong> For processing purposes, we must verify your identity (knowing that identity verification may be impossible).
+                </div>
+
+                <form id="identityForm">
+                    <div class="form-group">
+                        <label class="form-label">Full Legal Name <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="legalName" required>
+                        <div class="form-help">As it appears on your most recent government document... or as it appeared on a government document at any point in time... or as a government body believes it should appear</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Date of Birth <span class="required">*</span></label>
+                        <input type="date" class="form-input" id="dob" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Current Address <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="currentAddress" required>
+                        <div class="form-help">Your current residential address (or most recent known address, or address we have on file)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email Address <span class="required">*</span></label>
+                        <input type="email" class="form-input" id="emailAddress" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Phone Number <span class="required">*</span></label>
+                        <input type="tel" class="form-input" id="phoneNumber" required>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="identityCertification" required>
+                            <label for="identityCertification">I certify my identity, knowing that identity verification may be impossible <span class="required">*</span></label>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">PROCEED TO NEXT STAGE</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Stage 3: Route Your Request -->
+            <div id="form3" class="form-section">
+                <div class="form-header">
+                    <h2>Route Your Request</h2>
+                    <div class="form-id">FORM ID: FOI-RR-003-v15.9.2 (pending update)</div>
+                </div>
+
+                <div class="progress-indicator">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 42%;"></div>
+                    </div>
+                    <div class="progress-text">STAGE 3 OF 7 - ROUTE YOUR REQUEST</div>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>Routing Notice:</strong> Your request has been received. We must now determine which department holds this information (if any department holds this information, or if information exists).
+                </div>
+
+                <form id="routingForm">
+                    <div class="form-group">
+                        <label class="form-label">Does your request relate to government operations? <span class="required">*</span></label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="radio" name="govOps" id="govOpsYes" value="yes" required>
+                                <label for="govOpsYes">Yes</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" name="govOps" id="govOpsNo" value="no" required>
+                                <label for="govOpsNo">No</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" name="govOps" id="govOpsUnknown" value="unknown" required>
+                                <label for="govOpsUnknown">Unknown</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="govLevelGroup" style="display: none;">
+                        <label class="form-label">Which level? <span class="required">*</span></label>
+                        <select class="form-select" id="governmentLevel">
+                            <option value="">-- Select One --</option>
+                            <option value="federal">Federal</option>
+                            <option value="state">State/Territory</option>
+                            <option value="local">Local</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="federalDeptGroup" style="display: none;">
+                        <label class="form-label">Which department?</label>
+                        <select class="form-select" id="federalDepartment">
+                            <option value="">-- Select Department --</option>
+                            <option value="homeaffairs">Department of Home Affairs</option>
+                            <option value="justice">Department of Justice</option>
+                            <option value="finance">Department of Finance</option>
+                            <option value="ato">Australian Tax Office</option>
+                            <option value="health">Department of Health</option>
+                            <option value="education">Department of Education</option>
+                            <option value="clarification">Department of Administrative Clarification</option>
+                            <option value="jurisdictional">Bureau of Jurisdictional Determination</option>
+                            <option value="recursive">Office of Recursive Processing</option>
+                            <option value="nonexistent">Department That May Not Exist</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="stateGroup" style="display: none;">
+                        <label class="form-label">Which state?</label>
+                        <select class="form-select" id="stateSelection">
+                            <option value="">-- Select State --</option>
+                            <option value="nsw">NSW</option>
+                            <option value="vic">VIC</option>
+                            <option value="qld">QLD</option>
+                            <option value="wa">WA</option>
+                            <option value="sa">SA</option>
+                            <option value="tas">TAS</option>
+                            <option value="act">ACT</option>
+                            <option value="nt">NT</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="nonGovGroup" style="display: none;">
+                        <label class="form-label">What does it relate to?</label>
+                        <select class="form-select" id="nonGovCategory">
+                            <option value="">-- Select One --</option>
+                            <option value="private">Private Information</option>
+                            <option value="nonexistent">Non-Existent Information</option>
+                            <option value="conceptual">Conceptual Information</option>
+                            <option value="meta">Information About Information</option>
+                        </select>
+                    </div>
+
+                    <div id="localAlert" class="alert alert-warning hidden">
+                        <strong>Jurisdictional Notice:</strong> We do not handle local requests. Please contact your local council. [You may continue anyway]
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">PROCEED TO NEXT STAGE</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Stage 4: Exemption Analysis -->
+            <div id="form4" class="form-section">
+                <div class="form-header">
+                    <h2>Exemption Analysis</h2>
+                    <div class="form-id">FORM ID: FOI-EA-004-v23.6.1 (or later)</div>
+                </div>
+
+                <div class="progress-indicator">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 56%;"></div>
+                    </div>
+                    <div class="progress-text">STAGE 4 OF 7 - EXEMPTION ANALYSIS</div>
+                </div>
+
+                <div class="alert alert-warning">
+                    <strong>Legal Assessment:</strong> We must now assess potential grounds for refusal under the Freedom of Information Act (and related legislation, and unrelated legislation).
+                </div>
+
+                <form id="exemptionForm">
+                    <div class="form-group">
+                        <label class="form-label">Which of the following may apply to your request?</label>
+                        <div class="form-help" style="margin-bottom: 15px;">Select all that may be relevant (some checkboxes may appear and disappear)</div>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="exempt1">
+                                <label for="exempt1">Cabinet documents and deliberations</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="exempt2">
+                                <label for="exempt2">Legal professional privilege</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="exempt3">
+                                <label for="exempt3">Personal information</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="exempt4">
+                                <label for="exempt4">Information that may cause embarrassment</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="exempt5">
+                                <label for="exempt5">Documents filed upside down</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="exempt6">
+                                <label for="exempt6">Knowledge that shouldn't exist</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="exempt7">
+                                <label for="exempt7">Records lost in the 1987 incident</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="exempt8">
+                                <label for="exempt8">Information classified under Executive Order Zero</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="exempt9">
+                                <label for="exempt9">None of the above</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="exempt10">
+                                <label for="exempt10">Cannot determine</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">PROCEED TO NEXT STAGE</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Stage 5: Supporting Documentation -->
+            <div id="form5" class="form-section">
+                <div class="form-header">
+                    <h2>Supporting Documentation</h2>
+                    <div class="form-id">FORM ID: FOI-SD-005-v31.2.9 (version uncertain)</div>
+                </div>
+
+                <div class="progress-indicator">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 70%;"></div>
+                    </div>
+                    <div class="progress-text">STAGE 5 OF 7 - SUPPORTING DOCUMENTATION</div>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>Documentation Requirements:</strong> Please upload one (or more, or none) of the following documents to support your request.
+                </div>
+
+                <form id="documentationForm">
+                    <div class="form-group">
+                        <label class="form-label">Select document types (optional)</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="doc1">
+                                <label for="doc1">Proof of Australian Citizenship</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="doc2">
+                                <label for="doc2">Statutory Declaration of Information Necessity</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="doc3">
+                                <label for="doc3">Form FOI-47b (Application for Permission to Request Information)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="doc4">
+                                <label for="doc4">Form FOI-47b-i (Application for Permission to Request Permission to Request Information)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="doc5">
+                                <label for="doc5">Death Certificate (if applicable)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="doc6">
+                                <label for="doc6">Proof that Information Exists</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="doc7">
+                                <label for="doc7">Proof that Information Should Exist</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="doc8">
+                                <label for="doc8">The Information Itself (If You Already Know What You're Requesting)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Upload File (optional)</label>
+                        <div style="border: 2px dashed var(--borders); padding: 30px; text-align: center; cursor: pointer; background: rgba(124, 179, 66, 0.03);" onclick="document.getElementById('fileInput').click()">
+                            <p style="margin-bottom: 10px; font-size: 18px;">📄</p>
+                            <p style="margin-bottom: 10px; font-weight: 600;">Click to select file</p>
+                            <p style="font-size: 11px; color: var(--grey-secondary);">Accepted formats: PDF, DOCX, DOC, TXT (may or may not be processed)</p>
+                            <input type="file" id="fileInput" style="display: none;" accept=".pdf,.doc,.docx,.txt">
+                        </div>
+                        <div id="fileName" class="form-help" style="margin-top: 10px;"></div>
+                    </div>
+
+                    <div id="uploadStatus" class="alert alert-info hidden">
+                        <strong>Upload Status:</strong> <span id="uploadMessage"></span>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">PROCEED TO NEXT STAGE</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Stage 6: Request Justification -->
+            <div id="form6" class="form-section">
+                <div class="form-header">
+                    <h2>Request Justification</h2>
+                    <div class="form-id">FORM ID: FOI-RJ-006-v47.8.5 (revised continuously)</div>
+                </div>
+
+                <div class="progress-indicator">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 84%;"></div>
+                    </div>
+                    <div class="progress-text">STAGE 6 OF 7 - REQUEST JUSTIFICATION</div>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>Re-Verification Required:</strong> Please re-verify and justify your request (it may differ from your initial submission).
+                </div>
+
+                <form id="justificationForm">
+                    <div class="form-group">
+                        <label class="form-label">Restate your original request <span class="required">*</span></label>
+                        <textarea class="form-textarea" id="restatedRequest" required placeholder="Re-state the information you are seeking (it may differ from your initial submission)"></textarea>
+                        <div class="form-help">This may or may not match your previous response</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Explain why this information is in the public interest <span class="required">*</span></label>
+                        <textarea class="form-textarea" id="publicInterest" required maxlength="500"></textarea>
+                        <div class="form-help" id="charCount">500 characters remaining (countdown may be inaccurate)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">By submitting this request, do you acknowledge that you may never receive a response? <span class="required">*</span></label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="radio" name="acknowledge" id="ackYes" value="yes" required>
+                                <label for="ackYes">Yes</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" name="acknowledge" id="ackNo" value="no" required>
+                                <label for="ackNo">No</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" name="acknowledge" id="ackUnsure" value="unsure" required>
+                                <label for="ackUnsure">Unsure</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" name="acknowledge" id="ackNonsense" value="nonsense" required>
+                                <label for="ackNonsense">This Question Makes No Sense</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">On a scale of 1-10, how realistic are your expectations of receiving this information? <span class="required">*</span></label>
+                        <input type="range" class="form-input" id="expectationScale" min="1" max="10" value="5" required style="width: 100%; height: 30px;">
+                        <div class="form-help" style="text-align: center; font-size: 14px; margin-top: 10px;">Current: <span id="scaleValue" style="font-weight: bold; color: var(--sickly-green);">5</span></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Have you previously submitted this exact request? <span class="required">*</span></label>
+                        <select class="form-select" id="previousSubmission" required>
+                            <option value="">-- Select One --</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                            <option value="unknown">Unknown</option>
+                            <option value="possibly">Possibly</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="prevCountGroup" style="display: none;">
+                        <label class="form-label">How many times?</label>
+                        <input type="number" class="form-input" id="previousCount" min="1" value="1">
+                        <div class="form-help">Number may auto-increment</div>
+                    </div>
+
+                    <div class="form-group" id="satisfactionGroup" style="display: none;">
+                        <label class="form-label">Were you satisfied with the previous response?</label>
+                        <select class="form-select" id="previousSatisfaction">
+                            <option value="never">N/A - Never Received Response</option>
+                            <option value="unintelligible">N/A - Response Unintelligible</option>
+                            <option value="partial">Partially - Some Information Provided</option>
+                            <option value="redacted">No - Information Was Redacted</option>
+                            <option value="form">No - Response Was Just This Form Again</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">PROCEED TO FINAL STAGE</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Stage 7: Final Submission -->
+            <div id="form7" class="form-section">
+                <div class="form-header">
+                    <h2>FINAL SUBMISSION</h2>
+                    <div class="form-id">FORM ID: FOI-FS-007-v99.0.0 (terminal version)</div>
+                </div>
+
+                <div class="progress-indicator">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                    </div>
+                    <div class="progress-text">STAGE 7 OF 7 - FINAL SUBMISSION</div>
+                </div>
+
+                <div class="alert alert-warning">
+                    <strong>Final Processing:</strong> Your request for Freedom of Information is now being processed by the Department of Information and Records.
+                </div>
+
+                <div id="processingStatus" style="background: rgba(124, 179, 66, 0.1); border: 2px solid var(--sickly-green); padding: 30px; margin: 20px 0; text-align: center; font-family: 'Courier New', monospace;">
+                    <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: var(--text);">PROCESSING YOUR REQUEST...</div>
+                    <div style="font-size: 32px; color: var(--rusted-orange); font-weight: bold;" id="processingPercent">0%</div>
+                    <div style="font-size: 11px; color: var(--grey-secondary); margin-top: 10px;">[timer stuck at 0%]</div>
+                </div>
+
+                <form id="finalForm">
+                    <div class="form-group">
+                        <label class="form-label">Final Acknowledgments (all required) <span class="required">*</span></label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="final1" required>
+                                <label for="final1">I understand this may be processed under the FOI Act of 2024 or any previous or future iteration <span class="required">*</span></label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="final2" required>
+                                <label for="final2">I understand that processing times are 30-200 business days, where a 'business day' is defined by the Department <span class="required">*</span></label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="final3" required>
+                                <label for="final3">I understand that a response may not constitute information <span class="required">*</span></label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="final4" required>
+                                <label for="final4">I understand that I may not understand the response <span class="required">*</span></label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="final5" required>
+                                <label for="final5">I waive my right to know the reason for any refusal or delay <span class="required">*</span></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" style="font-size: 18px; padding: 16px 48px;">SUBMIT FINAL REQUEST</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Endpoint 1: The Received Loop -->
+            <div id="endpoint1" class="form-section">
+                <div class="status-screen">
+                    <div class="status-icon">📋</div>
+                    <h2 class="status-title">Your request has been received.</h2>
+                    <div class="alert alert-info" style="text-align: left; max-width: 600px; margin: 20px auto;">
+                        <strong>Processing Status:</strong> In Queue (Position: 847,392 of 847,391)<br>
+                        <strong>Estimated Wait Time:</strong> Unable to Calculate<br><br>
+                        Your application has been logged and will be processed in accordance with departmental protocols (timeline uncertain).
+                    </div>
+                    <div style="margin-top: 30px;">
+                        <button class="btn btn-primary" onclick="checkStatus()">Check Status</button>
+                        <button class="btn btn-secondary" onclick="startNewRequest()">Submit New Request</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Endpoint 2: The Redaction -->
+            <div id="endpoint2" class="form-section">
+                <div class="status-screen">
+                    <div class="status-icon">📄</div>
+                    <h2 class="status-title">Your request has been processed. Response below:</h2>
+                    <div style="background: #000; padding: 40px; margin: 20px auto; max-width: 600px; text-align: center;">
+                        <div class="redacted" style="display: block; margin: 10px 0; padding: 20px;">REDACTED REDACTED REDACTED REDACTED</div>
+                        <div class="redacted" style="display: block; margin: 10px 0; padding: 20px;">REDACTED REDACTED REDACTED</div>
+                        <div class="redacted" style="display: block; margin: 10px 0; padding: 20px;">REDACTED REDACTED REDACTED REDACTED REDACTED</div>
+                    </div>
+                    <div class="alert alert-warning" style="text-align: center; max-width: 600px; margin: 20px auto;">
+                        If you wish to appeal this redaction, complete Form <span class="redacted">FOI-APPEAL-1</span><br>
+                        <small>(Link to form is also <span class="redacted">REDACTED</span>)</small>
+                    </div>
+                    <div style="margin-top: 30px;">
+                        <button class="btn btn-primary" onclick="returnToHome()">Return Home</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Endpoint 3: The Temporal Paradox -->
+            <div id="endpoint3" class="form-section">
+                <div class="status-screen">
+                    <div class="status-icon">⏰</div>
+                    <h2 class="status-title">Your request cannot be processed.</h2>
+                    <div class="alert alert-error" style="text-align: left; max-width: 600px; margin: 20px auto;">
+                        <strong>Reason:</strong> The information you are requesting has been classified retroactively.<br>
+                        <strong>Classification Date:</strong> <span id="futureDate"></span> (future date)<br>
+                        <strong>Contact:</strong> Please contact the Department (Note: Department does not exist)<br><br>
+                        This decision is final and cannot be appealed (or can be appealed through channels that do not exist).
+                    </div>
+                    <div style="margin-top: 30px;">
+                        <button class="btn btn-primary" onclick="returnToHome()">Return Home</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Endpoint 4: The Existential -->
+            <div id="endpoint4" class="form-section">
+                <div class="status-screen">
+                    <div class="status-icon">❓</div>
+                    <h2 class="status-title">Your request for information has been received.</h2>
+                    <div class="alert alert-warning" style="text-align: left; max-width: 600px; margin: 20px auto;">
+                        <strong>Determination:</strong> The Department has determined that this information may not exist.<br><br>
+                        However, the Department also cannot confirm the non-existence of this information.<br><br>
+                        This matter has been escalated to the Bureau of Philosophical Determination.<br><br>
+                        <strong>Decision expected:</strong> When consensus is reached (consensus not expected)
+                    </div>
+                    <div style="margin-top: 30px;">
+                        <button class="btn btn-primary" onclick="returnToHome()">Return Home</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Endpoint 5: The Infinite Regress -->
+            <div id="endpoint5" class="form-section">
+                <div class="status-screen">
+                    <div class="status-icon">🔄</div>
+                    <h2 class="status-title">Meta-Request Required</h2>
+                    <div class="alert alert-info" style="text-align: center; max-width: 600px; margin: 20px auto;">
+                        <strong>Notice:</strong> To process your FOI request, you must first request the information about how to request information.<br><br>
+                        Please click below to begin the Preliminary Information Request.
+                    </div>
+                    <div style="margin-top: 30px;">
+                        <button class="btn btn-primary" onclick="beginMetaRequest()">Begin Meta-Request</button>
+                        <button class="btn btn-secondary" onclick="returnToHome()">Return Home</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Endpoint 6: The System Error -->
+            <div id="endpoint6" class="form-section">
+                <div class="status-screen glitch">
+                    <div class="status-icon" style="background: var(--rusted-orange); animation: glitchEffect 0.5s infinite;">⚠</div>
+                    <h2 class="status-title glitch">CRITICAL SYSTEM ERROR [DOES NOT EXIST]</h2>
+                    <div class="alert alert-error" style="text-align: center; max-width: 600px; margin: 20px auto; background: rgba(184, 134, 11, 0.2);">
+                        <strong style="font-size: 18px;">ERROR CODE: NULL</strong><br><br>
+                        This interface is not responsible for outcomes.<br><br>
+                        [HEAVY VISUAL GLITCH DETECTED]<br>
+                        [GEOMETRY DISTORTED]<br>
+                        [STATIC INTERFERENCE]
+                    </div>
+                    <div style="margin-top: 30px;">
+                        <button class="btn btn-primary" onclick="acknowledge()">ACKNOWLEDGE</button>
+                        <button class="btn btn-secondary" onclick="returnToHome()">Return Home</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3>Portal Status</h3>
+                <div class="status-item">
+                    <span>System Status</span>
+                    <strong style="color: var(--sickly-green);">Operational</strong>
+                </div>
+                <div class="status-item">
+                    <span>Processing Queue</span>
+                    <strong>847,391 applications</strong>
+                </div>
+                <div class="status-item">
+                    <span>Average Wait Time</span>
+                    <strong>??? days</strong>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Estimated Times</h3>
+                <div class="status-item">
+                    <span>Stage 1-3</span>
+                    <strong>60 days</strong>
+                </div>
+                <div class="status-item">
+                    <span>Stage 4-6</span>
+                    <strong>90 days</strong>
+                </div>
+                <div class="status-item">
+                    <span>Stage 7</span>
+                    <strong>∞ days</strong>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Important Notes</h3>
+                <div style="font-size: 11px; line-height: 1.6; color: var(--text);">
+                    <p style="margin-bottom: 10px;">• All processing times are estimates</p>
+                    <p style="margin-bottom: 10px;">• Decisions may be subject to review (or not)</p>
+                    <p style="margin-bottom: 10px;">• Information may be redacted for various reasons</p>
+                    <p style="margin-bottom: 10px;">• The Department reserves all rights</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script src="app.js"></script>
+
+</body>
+</html>
