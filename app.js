@@ -48,7 +48,7 @@ function hideLoading() {
 
 // Start application
 function startApplication() {
-    showLoading('Initializing your application...');
+    showLoading('Initialising your application...');
     setTimeout(() => {
         hideLoading();
         startTimer();
